@@ -1,0 +1,16 @@
+.header {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  padding: 5px;
+}
+
+.button-header {
+  background: none;
+	border: none;
+	color: inherit;
+	cursor: pointer;
+	font: inherit;
+	outline: inherit;
+	padding: 0;
+}

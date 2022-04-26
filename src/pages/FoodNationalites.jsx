@@ -1,10 +1,10 @@
 import React from 'react';
+import Header from '../components/Header';
 
 function FoodNationalites() {
   return (
-    <>
-      FoodNationalites
-    </>
+    <Header title="Explore Nationalities" />
+
   );
 }
 
