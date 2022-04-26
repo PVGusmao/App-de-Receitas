@@ -11,10 +11,13 @@ function Header(props) {
 
   return (
     <header className="header">
+
       <button type="button" className="button-header">
         <img data-testid="profile-top-btn" src={ profileBtn } alt="search" />
       </button>
+
       <h1 data-testid="page-title">{ title }</h1>
+
       {
         ((!match.path.includes('/explore')
         && !match.path.includes('/profile')
@@ -26,6 +29,7 @@ function Header(props) {
           </button>
         )
       }
+
     </header>
   );
 }

@@ -1,6 +1,6 @@
 .login-wrapper {
   align-items: center;
-  background-color: #A9927D;
+  background-color: #a9927d;
   display: flex;
   height: 100vh;
   justify-content: center;
@@ -9,8 +9,8 @@
 
 .login-container {
   align-items: center;
-  background-color: #49111C;
-  border: 1px solid #F2F4F3;
+  background-color: #49111c;
+  border: 1px solid #f2f4f3;
   display: flex;
   flex-direction: column;
   height: 300px;
