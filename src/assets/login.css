@@ -1,0 +1,19 @@
+.login-wrapper {
+  align-items: center;
+  background-color: #A9927D;
+  display: flex;
+  height: 100vh;
+  justify-content: center;
+  width: 100%;
+}
+
+.login-container {
+  align-items: center;
+  background-color: #49111C;
+  border: 1px solid #F2F4F3;
+  display: flex;
+  flex-direction: column;
+  height: 300px;
+  justify-content: center;
+  width: 300px;
+}
