@@ -37,38 +37,40 @@ function Login() {
   };
 
   return (
-    <section>
-      <label htmlFor="email">
-        <input
-          data-testid="email-input"
-          type="text"
-          name="email"
-          id="email"
-          className="email"
-          onChange={ handleChange }
-        />
-      </label>
+    <section className="login-wrapper">
+      <section className="login-container">
+        <label htmlFor="email">
+          <input
+            data-testid="email-input"
+            type="text"
+            name="email"
+            id="email"
+            className="email"
+            onChange={ handleChange }
+          />
+        </label>
 
-      <label htmlFor="password">
-        <input
-          data-testid="password-input"
-          type="password"
-          name="password"
-          id="password"
-          className="password"
-          onChange={ handleChange }
-        />
-      </label>
+        <label htmlFor="password">
+          <input
+            data-testid="password-input"
+            type="password"
+            name="password"
+            id="password"
+            className="password"
+            onChange={ handleChange }
+          />
+        </label>
 
-      <button
-        data-testid="login-submit-btn"
-        type="button"
-        className="button-submit"
-        disabled={ isDisabled }
-        onClick={ handleClick }
-      >
-        Submit
-      </button>
+        <button
+          data-testid="login-submit-btn"
+          type="button"
+          className="button-submit"
+          disabled={ isDisabled }
+          onClick={ handleClick }
+        >
+          Submit
+        </button>
+      </section>
     </section>
   );
 }
