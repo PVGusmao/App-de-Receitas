@@ -2,6 +2,7 @@ import React, { useContext } from 'react';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import UserContext from '../context/UserContext';
+import Footer from '../components/Footer';
 
 function Foods() {
   const {
@@ -14,6 +15,7 @@ function Foods() {
       {
         enableSearchBar && <SearchBar />
       }
+      <Footer />
     </>
   );
 }
