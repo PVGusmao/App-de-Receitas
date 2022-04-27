@@ -8,6 +8,7 @@ function SearchBar() {
   const [search, setSearch] = useState({
     search: '',
     selectedRadio: '',
+    path: match.path.split('/')[1],
   });
 
   const {
@@ -75,7 +76,7 @@ function SearchBar() {
         type="button"
         data-testid="exec-search-btn"
         className="button-search"
-        onClick={ () => handleClick(search, match.path.split('/')[1]) }
+        onClick={ () => handleClick(search) }
       >
         Search
       </button>

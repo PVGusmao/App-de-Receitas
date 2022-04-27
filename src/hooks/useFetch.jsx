@@ -2,11 +2,11 @@ import { useEffect, useState } from 'react';
 import { getByFirstLetter, getByIngredients, getByName } from '../services/api';
 
 function useFetch(props) {
-  const { search, path } = props;
+  const { search } = props;
   const [fetchSearch, setfetchSearch] = useState({
     search: search.search,
     selectedRadio: search.selectedRadio,
-    path,
+    path: search.path,
   });
   const [fetch, setFetch] = useState([]);
   useEffect(() => {
@@ -22,8 +22,7 @@ function useFetch(props) {
       getByFirstLetter(fetchSearch.path, fetchSearch.search)
         .then((element) => setFetch(element));
     }
-    console.log(fetchSearch.path);
-  }, [fetchSearch, path]);
+  }, [fetchSearch]);
 
   return [fetch, setfetchSearch];
 }
