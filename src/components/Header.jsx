@@ -1,18 +1,28 @@
 import React from 'react';
 import PropTypes from 'prop-types';
-import { useRouteMatch } from 'react-router-dom';
+import { useRouteMatch, useHistory } from 'react-router-dom';
 import searchBtn from '../images/searchIcon.svg';
 import profileBtn from '../images/profileIcon.svg';
 import '../assets/header.css';
 
 function Header(props) {
   const match = useRouteMatch();
+  const history = useHistory();
+
   const { title } = props;
+
+  const handleClick = () => {
+    history.push('/profile');
+  };
 
   return (
     <header className="header">
 
-      <button type="button" className="button-header">
+      <button
+        onClick={ handleClick }
+        type="button"
+        className="button-header"
+      >
         <img data-testid="profile-top-btn" src={ profileBtn } alt="search" />
       </button>
 
