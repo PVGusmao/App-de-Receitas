@@ -1,7 +1,16 @@
-import React from 'react';
+import React, { useContext } from 'react';
+import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import '../assets/searchBar.css';
+import UserContext from '../context/UserContext';
 
 function SearchBar() {
+  const match = useRouteMatch();
+  const {
+    search,
+    setSearch,
+    handleClick,
+  } = useContext(UserContext);
+
   return (
     <div className="search-wrapper">
       <label className="label-search" htmlFor="search">
@@ -9,8 +18,15 @@ function SearchBar() {
           data-testid="search-input"
           className="search"
           type="text"
-          name="search"
+          name="value"
           id="search"
+          onChange={
+            ({ target }) => setSearch({
+              ...search,
+              [target.name]: target.value,
+              path: match.path.split('/')[1],
+            })
+          }
         />
       </label>
       <div className="radio-button-wrapper">
@@ -21,6 +37,10 @@ function SearchBar() {
             type="radio"
             name="categories"
             id="ingredients"
+            value="ingredients"
+            onChange={
+              ({ target }) => setSearch({ ...search, selectedRadio: target.value })
+            }
           />
         </label>
 
@@ -31,6 +51,10 @@ function SearchBar() {
             type="radio"
             name="categories"
             id="name"
+            value="name"
+            onChange={
+              ({ target }) => setSearch({ ...search, selectedRadio: target.value })
+            }
           />
         </label>
 
@@ -41,6 +65,10 @@ function SearchBar() {
             type="radio"
             name="categories"
             id="first-letter"
+            value="first-letter"
+            onChange={
+              ({ target }) => setSearch({ ...search, selectedRadio: target.value })
+            }
           />
         </label>
       </div>
@@ -48,6 +76,7 @@ function SearchBar() {
         type="button"
         data-testid="exec-search-btn"
         className="button-search"
+        onClick={ handleClick }
       >
         Search
       </button>
