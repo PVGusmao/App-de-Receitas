@@ -1,13 +1,17 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { useRouteMatch, useHistory } from 'react-router-dom';
 import searchBtn from '../images/searchIcon.svg';
 import profileBtn from '../images/profileIcon.svg';
 import '../assets/header.css';
+import UserContext from '../context/UserContext';
 
 function Header(props) {
   const match = useRouteMatch();
   const history = useHistory();
+  const {
+    handleSerchBar,
+  } = useContext(UserContext);
 
   const { title } = props;
 
@@ -34,7 +38,11 @@ function Header(props) {
         && !match.path.includes('/favorite-recipes')
         && !match.path.includes('/done-recipes'))
         || match.path.includes('nationalities')) && (
-          <button type="button" className="button-header">
+          <button
+            type="button"
+            className="button-header"
+            onClick={ handleSerchBar }
+          >
             <img data-testid="search-top-btn" src={ searchBtn } alt="search" />
           </button>
         )
