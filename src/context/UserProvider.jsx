@@ -8,12 +8,20 @@ function UserProvider({ children }) {
     password: '',
   });
 
+  const [enableSearchBar, setEnableSearchBar] = useState(false);
+
+  const handleSerchBar = () => {
+    setEnableSearchBar(!enableSearchBar);
+  };
+
   const { Provider } = UserContext;
   return (
     <Provider
       value={ {
+        enableSearchBar,
         userInfo,
         setUserInfo,
+        handleSerchBar,
       } }
     >
       { children }
