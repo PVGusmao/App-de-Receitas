@@ -1,7 +1,14 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import '../assets/searchBar.css';
+import UserContext from '../context/UserContext';
 
 function SearchBar() {
+  const {
+    search,
+    setSearch,
+    handleClick,
+  } = useContext(UserContext);
+
   return (
     <div className="search-wrapper">
       <label className="label-search" htmlFor="search">
@@ -11,6 +18,9 @@ function SearchBar() {
           type="text"
           name="search"
           id="search"
+          onChange={ (e) => {
+            setSearch({ ...search, [e.target.name]: e.target.value });
+          } }
         />
       </label>
       <div className="radio-button-wrapper">
@@ -21,6 +31,10 @@ function SearchBar() {
             type="radio"
             name="categories"
             id="ingredients"
+            value="ingredients"
+            onChange={ (e) => {
+              setSearch({ ...search, selectedRadio: e.target.value });
+            } }
           />
         </label>
 
@@ -31,6 +45,10 @@ function SearchBar() {
             type="radio"
             name="categories"
             id="name"
+            value="name"
+            onChange={ (e) => {
+              setSearch({ ...search, selectedRadio: e.target.value });
+            } }
           />
         </label>
 
@@ -41,6 +59,10 @@ function SearchBar() {
             type="radio"
             name="categories"
             id="first-letter"
+            value="first-letter"
+            onChange={ (e) => {
+              setSearch({ ...search, selectedRadio: e.target.value });
+            } }
           />
         </label>
       </div>
@@ -48,6 +70,7 @@ function SearchBar() {
         type="button"
         data-testid="exec-search-btn"
         className="button-search"
+        onClick={ handleClick }
       >
         Search
       </button>
