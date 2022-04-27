@@ -8,7 +8,6 @@ function FoodNationalites() {
       <Header title="Explore Nationalities" />
       <Footer />
     </>
-
   );
 }
 

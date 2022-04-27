@@ -8,8 +8,7 @@ function ExploreDrinks() {
       <Header title="Explore Drinks" />
       <Footer />
     </>
-
-  );
+ );
 }
 
 export default ExploreDrinks;

@@ -8,7 +8,7 @@ function Drinks() {
       <Header title="Drinks" />
       <Footer />
     </>
-  );
-}
+      );
+    }
 
 export default Drinks;
