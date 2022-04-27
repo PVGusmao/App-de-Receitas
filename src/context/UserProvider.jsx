@@ -1,64 +1,41 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
 import UserContext from './UserContext';
 import { getByFirstLetter, getByIngredients, getByName } from '../services/api';
-// import useFetch from '../hooks/useFetch';
 
 function UserProvider({ children }) {
-  const history = useHistory();
   const [enableSearchBar, setEnableSearchBar] = useState(false);
   const [search, setSearch] = useState({
-    search: '',
+    value: '',
     selectedRadio: '',
     path: '',
   });
-  const [fetch, setFetchSearch] = useState([]);
-  // const [fetch, setFetchSearch] = useFetch(search);
   const [userInfo, setUserInfo] = useState({
     email: '',
     password: '',
   });
 
-  // useEffect(() => {
-  //   if (search.selectedRadio === 'ingredients') {
-  //     getByIngredients(search.path, search.search)
-  //       .then((element) => setFetchSearch(element));
-  //   } else if (search.selectedRadio === 'name') {
-  //     getByName(search.path, search.search)
-  //       .then((element) => setFetchSearch(element));
-  //   } else if (search.search.length > 1) {
-  //     global.alert('Your search must have only 1 (one) character');
-  //   } else {
-  //     getByFirstLetter(search.path, search.search)
-  //       .then((element) => setFetchSearch(element));
-  //   }
-  // }, [search, setFetchSearch]);
-
-  // useEffect(() => {
-  //   setFetchSearch({ ...search });
-  // }, [search, setFetchSearch]);
-
-  useEffect(() => {
-    const list = fetch.meals ?? fetch.drinks;
-    if (list && list.length === 1) {
-      history.push(`/${search.path}/${list[0].idDrink ?? list[0].idMeal}`);
+  const handleClick = () => {
+    const { path, value, selectedRadio } = search;
+    if (selectedRadio === 'ingredients') {
+      getByIngredients(path, value).then((element) => console.log(element));
+    } else if (selectedRadio === 'name') {
+      getByName(path, value).then((element) => console.log(element));
+    } else if (value.length > 1) {
+      global.alert('Your search must have only 1 (one) character');
+    } else {
+      getByFirstLetter(path, value).then((element) => console.log(element));
     }
-  }, [fetch, history, search]);
+  };
 
   const handleSerchBar = () => {
     setEnableSearchBar(!enableSearchBar);
-  };
-
-  const handleClick = (value) => {
-    setSearch(value);
   };
 
   const { Provider } = UserContext;
   return (
     <Provider
       value={ {
-        fetch,
         search,
         enableSearchBar,
         userInfo,
