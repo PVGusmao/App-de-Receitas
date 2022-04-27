@@ -52,6 +52,7 @@ function UserProvider({ children }) {
         search,
         enableSearchBar,
         userInfo,
+        data,
         setUserInfo,
         handleSerchBar,
         setSearch,
