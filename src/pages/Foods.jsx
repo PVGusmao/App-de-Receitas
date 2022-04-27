@@ -20,7 +20,7 @@ function Foods() {
       }
       <section className="cards-wrapper">
         {
-          Object.keys(data).length
+          Object.keys(data).length && data.meals
             && data.meals.slice(0, LIMIT_CARDS).map((element, index) => (
               <Cards
                 key={ element.idMeal }

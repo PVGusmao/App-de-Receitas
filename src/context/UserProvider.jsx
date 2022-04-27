@@ -36,10 +36,13 @@ function UserProvider({ children }) {
   };
 
   useEffect(() => {
-    if (Object.keys(data).length) {
+    const item = search.path === 'foods' ? 'meals' : 'drinks';
+    if ((Object.keys(data).length && !data[item]) === 0) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    } else if (Object.keys(data).length) {
       const { path } = search;
       const list = data.drinks ?? data.meals;
-      if (list.length === 1) {
+      if (list && list.length === 1) {
         history.push(`/${path}/${list[0].idDrink ?? list[0].idMeal}`);
       }
     }
