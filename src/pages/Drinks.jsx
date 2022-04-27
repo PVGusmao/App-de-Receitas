@@ -3,8 +3,11 @@ import Cards from '../components/Cards';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import UserContext from '../context/UserContext';
+import Footer from '../components/Footer';
 
 const LIMIT_CARDS = 12;
+
+
 
 function Drinks() {
   const {
@@ -30,6 +33,7 @@ function Drinks() {
             ))
         }
       </section>
+      <Footer />
     </>
   );
 }
