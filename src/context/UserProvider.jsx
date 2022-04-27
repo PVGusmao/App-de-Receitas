@@ -1,40 +1,40 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import UserContext from './UserContext';
-import { getByFirstLetter, getByIngredients, getByName } from '../services/api';
+// import { getByFirstLetter, getByIngredients, getByName } from '../services/api';
+import useFetch from '../hooks/useFetch';
 
 function UserProvider({ children }) {
   const [enableSearchBar, setEnableSearchBar] = useState(false);
-  // const [fetch, setFetch] = useState([]);
+  const [path, setPath] = useState();
   const [search, setSearch] = useState({
     search: '',
     selectedRadio: '',
   });
+  const [fetch, setFetchSearch] = useFetch(search, path);
   const [userInfo, setUserInfo] = useState({
     email: '',
     password: '',
   });
 
+  useEffect(() => {
+    setFetchSearch({ ...search, path });
+  }, [search, setFetchSearch, path]);
+
   const handleSerchBar = () => {
     setEnableSearchBar(!enableSearchBar);
   };
 
-  const handleClick = () => {
-    if (search.selectedRadio === 'ingredients') {
-      getByIngredients(search.search).then((element) => console.log(element));
-    } else if (search.selectedRadio === 'name') {
-      getByName(search.search).then((element) => console.log(element));
-    } else if (search.search.length > 1) {
-      global.alert('Your search must have only 1 (one) character');
-    } else {
-      getByFirstLetter(search.search).then((element) => console.log(element));
-    }
+  const handleClick = (value, way) => {
+    setSearch(value);
+    setPath(way);
   };
 
   const { Provider } = UserContext;
   return (
     <Provider
       value={ {
+        fetch,
         search,
         enableSearchBar,
         userInfo,

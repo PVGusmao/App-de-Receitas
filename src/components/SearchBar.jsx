@@ -1,11 +1,16 @@
-import React, { useContext } from 'react';
+import React, { useContext, useState } from 'react';
+import { useRouteMatch } from 'react-router-dom';
 import '../assets/searchBar.css';
 import UserContext from '../context/UserContext';
 
 function SearchBar() {
+  const match = useRouteMatch();
+  const [search, setSearch] = useState({
+    search: '',
+    selectedRadio: '',
+  });
+
   const {
-    search,
-    setSearch,
     handleClick,
   } = useContext(UserContext);
 
@@ -70,7 +75,7 @@ function SearchBar() {
         type="button"
         data-testid="exec-search-btn"
         className="button-search"
-        onClick={ handleClick }
+        onClick={ () => handleClick(search, match.path.split('/')[1]) }
       >
         Search
       </button>
