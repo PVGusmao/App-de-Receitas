@@ -8,7 +8,7 @@ function Explore() {
       <Header title="Explore" />
       <Footer />
     </>
-      );
-    }
+  );
+}
 
 export default Explore;
