@@ -7,8 +7,6 @@ import Footer from '../components/Footer';
 
 const LIMIT_CARDS = 12;
 
-
-
 function Drinks() {
   const {
     data,
