@@ -2,12 +2,14 @@ import React, { useEffect, useState } from 'react';
 import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import UserContext from './UserContext';
-import { getByFirstLetter, getByIngredients, getByName } from '../services/api';
+import { getByFirstLetter, getByIngredients, getByName,
+  getCategory } from '../services/api';
 
 function UserProvider({ children }) {
   const history = useHistory();
   const [enableSearchBar, setEnableSearchBar] = useState(false);
   const [data, setData] = useState([]);
+  const [category, setCategory] = useState([]);
   const [search, setSearch] = useState({
     value: '',
     selectedRadio: '',
@@ -17,6 +19,18 @@ function UserProvider({ children }) {
     email: '',
     password: '',
   });
+
+  const getStateCategoryFood = async () => {
+    const apiCategory = await getCategory('foods');
+    const categories = apiCategory.meals.map((elen) => elen.strCategory);
+    setCategory(categories);
+  };
+
+  const getStateCategoryDrinks = async () => {
+    const apiCategory = await getCategory('drinks');
+    const categories = apiCategory.drinks.map((elen) => elen.strCategory);
+    setCategory(categories);
+  };
 
   const handleClick = () => {
     const { path, value, selectedRadio } = search;
@@ -48,6 +62,14 @@ function UserProvider({ children }) {
     }
   }, [data, history, search]);
 
+  const initialRequestFood = () => {
+    getByName('foods', '').then((element) => setData(element));
+  };
+
+  const initialRequestDrink = () => {
+    getByName('drinks', '').then((element) => setData(element));
+  };
+
   const { Provider } = UserContext;
   return (
     <Provider
@@ -56,10 +78,15 @@ function UserProvider({ children }) {
         enableSearchBar,
         userInfo,
         data,
+        category,
         setUserInfo,
         handleSerchBar,
         setSearch,
         handleClick,
+        initialRequestFood,
+        initialRequestDrink,
+        getStateCategoryFood,
+        getStateCategoryDrinks,
       } }
     >
       { children }

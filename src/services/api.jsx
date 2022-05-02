@@ -24,3 +24,12 @@ export async function getByFirstLetter(path, firstLetter) {
   const data = await response.json();
   return data;
 }
+
+export async function getCategory(path) {
+  const url = path === 'foods'
+    ? 'https://www.themealdb.com/api/json/v1/1/list.php?c=list'
+    : 'https://www.thecocktaildb.com/api/json/v1/1/list.php?c=list';
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
