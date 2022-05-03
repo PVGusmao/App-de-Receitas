@@ -3,13 +3,16 @@ import PropTypes from 'prop-types';
 import { useHistory } from 'react-router-dom';
 import UserContext from './UserContext';
 import { getByFirstLetter, getByIngredients, getByName,
-  getCategory } from '../services/api';
+  getCategory,
+  getCategoryFilter } from '../services/api';
 
 function UserProvider({ children }) {
   const history = useHistory();
   const [enableSearchBar, setEnableSearchBar] = useState(false);
   const [data, setData] = useState([]);
+  const [categoryData, setCategoryData] = useState([]);
   const [category, setCategory] = useState([]);
+  const [filterCategory, setFilterCategory] = useState('');
   const [search, setSearch] = useState({
     value: '',
     selectedRadio: '',
@@ -19,6 +22,18 @@ function UserProvider({ children }) {
     email: '',
     password: '',
   });
+
+  const categoryFilterFood = async (selectedCategory) => {
+    const apiFilterCategory = await getCategoryFilter('foods', selectedCategory);
+    setFilterCategory(selectedCategory);
+    setCategoryData(apiFilterCategory);
+  };
+
+  const categoryFilterDrink = async (selectedCategory) => {
+    const apiFilterCategory = await getCategoryFilter('drink', selectedCategory);
+    setFilterCategory(selectedCategory);
+    setCategoryData(apiFilterCategory);
+  };
 
   const getStateCategoryFood = async () => {
     const apiCategory = await getCategory('foods');
@@ -56,7 +71,8 @@ function UserProvider({ children }) {
     } else if (Object.keys(data).length) {
       const { path } = search;
       const list = data.drinks ?? data.meals;
-      if (list && list.length === 1) {
+      if (list && list.length === 1 && !filterCategory) {
+        console.log(path);
         history.push(`/${path}/${list[0].idDrink ?? list[0].idMeal}`);
       }
     }
@@ -79,6 +95,8 @@ function UserProvider({ children }) {
         userInfo,
         data,
         category,
+        filterCategory,
+        categoryData,
         setUserInfo,
         handleSerchBar,
         setSearch,
@@ -87,6 +105,9 @@ function UserProvider({ children }) {
         initialRequestDrink,
         getStateCategoryFood,
         getStateCategoryDrinks,
+        categoryFilterFood,
+        categoryFilterDrink,
+        setFilterCategory,
       } }
     >
       { children }

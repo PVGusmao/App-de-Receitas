@@ -11,6 +11,8 @@ const LIMIT_CARDS = 12;
 function Drinks() {
   const {
     data,
+    categoryData,
+    filterCategory,
     enableSearchBar,
     initialRequestDrink,
     getStateCategoryDrinks,
@@ -19,7 +21,9 @@ function Drinks() {
   useEffect(() => {
     getStateCategoryDrinks();
     initialRequestDrink();
-  }, [initialRequestDrink]);
+  }, []);
+
+  const renderDrinks = filterCategory ? categoryData : data;
   return (
     <>
       <Header title="Drinks" />
@@ -29,9 +33,10 @@ function Drinks() {
       <ButtonsCategory />
       <section className="cards-wrapper">
         {
-          Object.keys(data).length > 0 && data.drinks
-            && data.drinks.slice(0, LIMIT_CARDS).map((element, index) => (
+          Object.keys(renderDrinks).length > 0 && renderDrinks.drinks
+            && renderDrinks.drinks.slice(0, LIMIT_CARDS).map((element, index) => (
               <Cards
+                id={ element.idDrink }
                 key={ element.idDrink }
                 title={ element.strDrink }
                 image={ element.strDrinkThumb }

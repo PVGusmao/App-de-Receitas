@@ -33,3 +33,12 @@ export async function getCategory(path) {
   const data = await response.json();
   return data;
 }
+
+export async function getCategoryFilter(path, category) {
+  const url = path === 'foods'
+    ? `https://www.themealdb.com/api/json/v1/1/filter.php?c=${category}`
+    : `https://www.thecocktaildb.com/api/json/v1/1/filter.php?c=${category}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
