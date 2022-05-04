@@ -1,5 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { PropTypes } from 'prop-types';
+import { useHistory } from 'react-router-dom';
 import { getDetailsRecipe, getByName } from '../services/api';
 import Cards from '../components/Cards';
 
@@ -8,12 +9,17 @@ const iHateMagicNumber2 = 32;
 const iHateMagicNumber3 = 6;
 
 function FoodDetail(props) {
+  const history = useHistory();
   const [detailsRecipe, setDetailsRecipe] = useState({});
   const [drinks, setDrinks] = useState([]);
   const { match: { params: { id } } } = props;
   const detailsRecipeFoods = async (idFood) => {
     const apiDetails = await getDetailsRecipe('foods', idFood);
     setDetailsRecipe(apiDetails.meals[0]);
+  };
+
+  const handleHistory = () => {
+    history.push(`/foods/${id}/in-progress`);
   };
 
   const handleButtonText = () => {
@@ -88,6 +94,7 @@ function FoodDetail(props) {
             <button
               type="button"
               data-testid="start-recipe-btn"
+              onClick={ handleHistory }
               style={ {
                 position: 'fixed',
                 bottom: '0px',
@@ -104,6 +111,7 @@ function FoodDetail(props) {
             <button
               type="button"
               data-testid="start-recipe-btn"
+              onClick={ handleHistory }
               style={ {
                 position: 'fixed',
                 bottom: '0px',
