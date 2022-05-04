@@ -71,7 +71,16 @@ function FoodDetail(props) {
           ))
         }
       </div>
-      <button type="button" data-testid="start-recipe-btn">Iniciar</button>
+      <button
+        type="button"
+        data-testid="start-recipe-btn"
+        style={ {
+          position: 'fixed',
+          bottom: '0px',
+        } }
+      >
+        Start Recipe
+      </button>
     </>
   );
 }
