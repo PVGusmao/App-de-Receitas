@@ -42,3 +42,12 @@ export async function getCategoryFilter(path, category) {
   const data = await response.json();
   return data;
 }
+
+export async function getDetailsRecipe(path, id) {
+  const url = path === 'foods'
+    ? `https://www.themealdb.com/api/json/v1/1/lookup.php?i=${id}`
+    : `https://www.thecocktaildb.com/api/json/v1/1/lookup.php?i=${id}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
