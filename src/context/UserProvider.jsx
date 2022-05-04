@@ -4,7 +4,8 @@ import { useHistory } from 'react-router-dom';
 import UserContext from './UserContext';
 import { getByFirstLetter, getByIngredients, getByName,
   getCategory,
-  getCategoryFilter } from '../services/api';
+  getCategoryFilter,
+  getDetailsRecipe } from '../services/api';
 
 function UserProvider({ children }) {
   const history = useHistory();
@@ -27,6 +28,11 @@ function UserProvider({ children }) {
     const apiFilterCategory = await getCategoryFilter('foods', selectedCategory);
     setFilterCategory(selectedCategory);
     setCategoryData(apiFilterCategory);
+  };
+
+  const detailsRecipeDrinks = async (idDrink) => {
+    const apiDetails = await getDetailsRecipe('drinks', idDrink);
+    setDetailsRecipe(apiDetails.drinks[0]);
   };
 
   const categoryFilterDrink = async (selectedCategory) => {
@@ -108,6 +114,7 @@ function UserProvider({ children }) {
         categoryFilterFood,
         categoryFilterDrink,
         setFilterCategory,
+        detailsRecipeDrinks,
       } }
     >
       { children }
