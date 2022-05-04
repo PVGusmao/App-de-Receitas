@@ -10,13 +10,23 @@ const iHateMagicNumber3 = 6;
 function FoodDetail(props) {
   const [detailsRecipe, setDetailsRecipe] = useState({});
   const [drinks, setDrinks] = useState([]);
+  const { match: { params: { id } } } = props;
   const detailsRecipeFoods = async (idFood) => {
     const apiDetails = await getDetailsRecipe('foods', idFood);
     setDetailsRecipe(apiDetails.meals[0]);
   };
 
+  const handleButtonText = () => {
+    const meals = JSON.parse(localStorage.getItem('inProgressRecipes'));
+
+    if (!Object.keys(meals.meals).some((item) => item === id)) {
+      return 'Start Recipe';
+    }
+
+    return 'Continue Recipe';
+  };
+
   useEffect(() => {
-    const { match: { params: { id } } } = props;
     detailsRecipeFoods(id);
     getByName('drinks', '').then((element) => setDrinks(element.drinks));
   }, []);
@@ -25,6 +35,7 @@ function FoodDetail(props) {
     .filter(([key, value]) => key.startsWith('strIngredient') && value)
     .map(([key, value]) => `${value} - ${detailsRecipe[
       `strMeasure${key.slice(iHateMagicNumber)}`]}`);
+
   return (
     <>
       <h1 data-testid="recipe-title">{detailsRecipe.strMeal }</h1>
@@ -71,16 +82,39 @@ function FoodDetail(props) {
           ))
         }
       </div>
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        style={ {
-          position: 'fixed',
-          bottom: '0px',
-        } }
-      >
-        Start Recipe
-      </button>
+      {
+        JSON.parse(localStorage.getItem('doneRecipes')) === null
+          ? (
+            <button
+              type="button"
+              data-testid="start-recipe-btn"
+              style={ {
+                position: 'fixed',
+                bottom: '0px',
+              } }
+            >
+              {
+                JSON.parse(localStorage.getItem('inProgressRecipes')) !== null
+                && handleButtonText()
+              }
+            </button>
+          ) : !JSON.parse(localStorage.getItem('doneRecipes'))
+            .some((recipe) => recipe.id === id)
+          && (
+            <button
+              type="button"
+              data-testid="start-recipe-btn"
+              style={ {
+                position: 'fixed',
+                bottom: '0px',
+              } }
+            >
+              {
+                handleButtonText()
+              }
+            </button>
+          )
+      }
     </>
   );
 }

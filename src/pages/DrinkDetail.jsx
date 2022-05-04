@@ -8,14 +8,24 @@ const iHateMagicNumber3 = 6;
 
 function DrinkDetail(props) {
   const [detailsRecipe, setDetailsRecipe] = useState({});
+  const { match: { params: { id } } } = props;
   const [meals, setMeals] = useState([]);
   const detailsRecipeDrinks = async (idDrink) => {
     const apiDetails = await getDetailsRecipe('drinks', idDrink);
     setDetailsRecipe(apiDetails.drinks[0]);
   };
 
+  const handleButtonText = () => {
+    const drinks = JSON.parse(localStorage.getItem('inProgressRecipes'));
+
+    if (!Object.keys(drinks.cocktails).some((item) => item === id)) {
+      return 'Start Recipe';
+    }
+
+    return 'Continue Recipe';
+  };
+
   useEffect(() => {
-    const { match: { params: { id } } } = props;
     detailsRecipeDrinks(id);
     getByName('foods', '').then((meal) => setMeals(meal.meals));
   }, []);
@@ -69,16 +79,39 @@ function DrinkDetail(props) {
           ))
         }
       </div>
-      <button
-        type="button"
-        data-testid="start-recipe-btn"
-        style={ {
-          position: 'fixed',
-          bottom: '0px',
-        } }
-      >
-        Start Recipe
-      </button>
+      {
+        JSON.parse(localStorage.getItem('doneRecipes')) === null
+          ? (
+            <button
+              type="button"
+              data-testid="start-recipe-btn"
+              style={ {
+                position: 'fixed',
+                bottom: '0px',
+              } }
+            >
+              {
+                JSON.parse(localStorage.getItem('inProgressRecipes')) !== null
+                && handleButtonText()
+              }
+            </button>
+          ) : !JSON.parse(localStorage.getItem('doneRecipes'))
+            .some((recipe) => recipe.id === id)
+      && (
+        <button
+          type="button"
+          data-testid="start-recipe-btn"
+          style={ {
+            position: 'fixed',
+            bottom: '0px',
+          } }
+        >
+          {
+            handleButtonText()
+          }
+        </button>
+      )
+      }
     </>
   );
 }
