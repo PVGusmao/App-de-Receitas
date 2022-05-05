@@ -79,14 +79,26 @@ function FoodDetail() {
         alt={ detailsRecipe.strMeal }
         data-testid="recipe-photo"
       />
+
       { shared && <p>Link copied!</p> }
+
       <button type="button" data-testid="share-btn" onClick={ handleShare }>
         <img src={ shareIcon } alt="Share recipe" />
       </button>
-      <button type="button" data-testid="favorite-btn" onClick={ handleFavorite }>
+      <button type="button" onClick={ handleFavorite }>
         { getStorage('favoriteRecipes').some((recipe) => recipe.id === id)
-          ? <img src={ blackHeartIcon } alt="Unfavorite recipe" />
-          : <img src={ whiteHeartIcon } alt="Favorite recipe" /> }
+          ? (
+            <img
+              data-testid="favorite-btn"
+              src={ blackHeartIcon }
+              alt="Unfavorite recipe"
+            />)
+          : (
+            <img
+              data-testid="favorite-btn"
+              src={ whiteHeartIcon }
+              alt="Favorite recipe"
+            />) }
       </button>
       <p data-testid="recipe-category">{ detailsRecipe.strCategory}</p>
       <ul>
