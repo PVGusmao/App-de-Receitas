@@ -1,29 +1,25 @@
 import React, { useContext } from 'react';
-import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import UserContext from '../context/UserContext';
 
+const CATEGORY_LIMIT = 5;
+
 function ButtonsCategory() {
-  const match = useRouteMatch();
   const {
-    category,
-    categoryFilterFood,
-    categoryFilterDrink,
+    categoryList,
+    filterByCategory,
     filterCategory,
     setFilterCategory,
   } = useContext(UserContext);
-  const iHateMagicNumber = 5;
 
   const categoryFoodAndDrink = ({ target }) => {
-    const path = match.path.split('/')[1];
     if (filterCategory === target.value || target.value === '') setFilterCategory('');
-    else if (path === 'foods') categoryFilterFood(target.value);
-    else categoryFilterDrink(target.value);
+    else filterByCategory(target.value);
   };
 
   return (
     <section>
       {
-        category.slice(0, iHateMagicNumber).map((element) => (
+        categoryList.slice(0, CATEGORY_LIMIT).map((element) => (
           <button
             onClick={ categoryFoodAndDrink }
             value={ element }

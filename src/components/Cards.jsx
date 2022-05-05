@@ -1,11 +1,11 @@
-import React from 'react';
+import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
-import { Link, useRouteMatch } from 'react-router-dom';
+import { Link } from 'react-router-dom';
+import UserContext from '../context/UserContext';
 
 function Cards(props) {
-  const match = useRouteMatch();
+  const { path } = useContext(UserContext);
   const { index, title, image, id, details } = props;
-  const path = match.path.split('/')[1];
   return (
     <Link
       data-testid={ `${index}-recomendation-card` }
