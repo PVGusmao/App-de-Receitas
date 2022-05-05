@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { getByName, getDetailsRecipe } from '../services/api';
 import Cards from '../components/Cards';
-import { getStorage } from '../services/storage';
+import { getStorage, setStorage } from '../services/storage';
 import shareLink from '../images/shareIcon.svg';
 import whiteHeartIcon from '../images/whiteHeartIcon.svg';
 import blackHeartIcon from '../images/blackHeartIcon.svg';
@@ -14,11 +14,12 @@ const LIMIT_CARDS = 6;
 const MSG_TIMEOUT = 3000;
 
 function DrinkDetail() {
-  const history = useHistory();
-  const { id } = useParams();
+  const [changeFavorite, setChangefavorite] = useState(false);
   const [detailsRecipe, setDetailsRecipe] = useState({});
   const [shared, setShared] = useState(false);
   const [meals, setMeals] = useState([]);
+  const history = useHistory();
+  const { id } = useParams();
   const detailsRecipeDrinks = async (idDrink) => {
     const apiDetails = await getDetailsRecipe('drinks', idDrink);
     setDetailsRecipe(apiDetails.drinks[0]);
@@ -44,9 +45,30 @@ function DrinkDetail() {
     setTimeout(() => setShared(false), MSG_TIMEOUT);
   };
 
+  const handleFavorite = () => {
+    if (getStorage('favoriteRecipes').some((recipe) => recipe.id === id)) {
+      setStorage('favoriteRecipes', getStorage('favoriteRecipes')
+        .filter((element) => element.id !== id));
+      setChangefavorite(false);
+    } else {
+      const obj = {
+        id,
+        type: 'drink',
+        nationality: !detailsRecipe.strArea ? '' : detailsRecipe.strArea,
+        category: detailsRecipe.strCategory,
+        alcoholicOrNot: !detailsRecipe.strAlcoholic ? '' : detailsRecipe.strAlcoholic,
+        name: detailsRecipe.strDrink,
+        image: detailsRecipe.strDrinkThumb,
+      };
+      setStorage('favoriteRecipes', [...getStorage('favoriteRecipes'), obj]);
+      setChangefavorite(true);
+    }
+  };
+
   useEffect(() => {
     detailsRecipeDrinks(id);
     getByName('foods', '').then((meal) => setMeals(meal.meals));
+    setChangefavorite(getStorage('favoriteRecipes').some((recipe) => recipe.id === id));
   }, []);
 
   const ingredients = Object.entries(detailsRecipe)
@@ -72,8 +94,9 @@ function DrinkDetail() {
       </button>
       <button
         type="button"
+        onClick={ handleFavorite }
       >
-        { getStorage('favoriteRecipes').some((recipe) => recipe.id === id)
+        { changeFavorite
           ? (
             <img
               data-testid="favorite-btn"

@@ -22,6 +22,7 @@ function FoodDetail() {
   const history = useHistory();
   const { id } = useParams();
   const [detailsRecipe, setDetailsRecipe] = useState({});
+  const [changeFavorite, setChangefavorite] = useState(false);
   const [drinks, setDrinks] = useState([]);
   const [shared, setShared] = useState(false);
   const detailsRecipeFoods = async (idFood) => {
@@ -51,19 +52,29 @@ function FoodDetail() {
 
   const handleFavorite = () => {
     if (getStorage('favoriteRecipes').some((recipe) => recipe.id === id)) {
-      // unfavorite
+      setStorage('favoriteRecipes', getStorage('favoriteRecipes')
+        .filter((element) => element.id !== id));
+      setChangefavorite(false);
     } else {
-      setStorage('favoriteRecipes', [...getStorage('favoriteRecipes'), {
+      const obj = {
         id,
         type: 'food',
-        nationality: null,
-      }]);
+        nationality: !detailsRecipe.strArea ? '' : detailsRecipe.strArea,
+        category: detailsRecipe.strCategory,
+        alcoholicOrNot: !detailsRecipe.strAlcoholic ? '' : detailsRecipe.strAlcoholic,
+        name: detailsRecipe.strMeal,
+        image: detailsRecipe.strMealThumb,
+      };
+
+      setStorage('favoriteRecipes', [...getStorage('favoriteRecipes'), obj]);
+      setChangefavorite(true);
     }
   };
 
   useEffect(() => {
     detailsRecipeFoods(id);
     getByName('drinks', '').then((element) => setDrinks(element.drinks));
+    setChangefavorite(getStorage('favoriteRecipes').some((recipe) => recipe.id === id));
   }, []);
 
   const ingredients = Object.entries(detailsRecipe)
@@ -86,7 +97,7 @@ function FoodDetail() {
         <img src={ shareIcon } alt="Share recipe" />
       </button>
       <button type="button" onClick={ handleFavorite }>
-        { getStorage('favoriteRecipes').some((recipe) => recipe.id === id)
+        { changeFavorite
           ? (
             <img
               data-testid="favorite-btn"
