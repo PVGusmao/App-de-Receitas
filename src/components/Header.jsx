@@ -9,9 +9,7 @@ import UserContext from '../context/UserContext';
 function Header(props) {
   const match = useRouteMatch();
   const history = useHistory();
-  const {
-    handleSerchBar,
-  } = useContext(UserContext);
+  const { handleSearchBar } = useContext(UserContext);
 
   const { title } = props;
 
@@ -21,7 +19,6 @@ function Header(props) {
 
   return (
     <header className="header">
-
       <button
         onClick={ handleClick }
         type="button"
@@ -41,7 +38,7 @@ function Header(props) {
           <button
             type="button"
             className="button-header"
-            onClick={ handleSerchBar }
+            onClick={ handleSearchBar }
           >
             <img data-testid="search-top-btn" src={ searchBtn } alt="search" />
           </button>

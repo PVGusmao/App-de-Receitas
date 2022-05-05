@@ -2,6 +2,9 @@ import React, { useContext, useState } from 'react';
 import { useHistory } from 'react-router-dom/cjs/react-router-dom.min';
 import '../assets/login.css';
 import UserContext from '../context/UserContext';
+import { setStorage } from '../services/storage';
+
+const MIN_PASSWORD = 6;
 
 function Login() {
   const [isDisabled, setIsDisabled] = useState(true);
@@ -12,11 +15,10 @@ function Login() {
     setUserInfo,
   } = useContext(UserContext);
 
-  const validationLogin = () => {
-    const six = 6;
+  const validationLogin = ({ email, password }) => {
     const validEmail = /\S+@\S+\.\S+/; // regex
     if (
-      userInfo.password.length >= six && validEmail.test(userInfo.email) // para comparar o regex
+      password.length > MIN_PASSWORD && validEmail.test(email) // para comparar o regex
     ) {
       setIsDisabled(false);
     } else {
@@ -26,19 +28,13 @@ function Login() {
 
   const handleChange = ({ target }) => {
     setUserInfo({ ...userInfo, [target.name]: target.value });
-    validationLogin();
+    validationLogin({ ...userInfo, [target.name]: target.value });
   };
 
   const handleClick = () => {
-    localStorage.setItem('mealsToken', 1);
-    localStorage.setItem('cocktailsToken', 1);
-    localStorage.setItem('user', JSON.stringify({ email: userInfo.email }));
-    localStorage.setItem('doneRecipes', JSON.stringify([]));
-    localStorage.setItem('favoriteRecipes ', JSON.stringify([]));
-    localStorage.setItem('inProgressRecipes', JSON.stringify({
-      cocktails: {},
-      meals: {},
-    }));
+    setStorage('mealsToken', 1);
+    setStorage('cocktailsToken', 1);
+    setStorage('user', { email: userInfo.email });
     history.push('/foods');
   };
 

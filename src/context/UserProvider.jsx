@@ -1,95 +1,72 @@
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useLocation } from 'react-router-dom';
 import UserContext from './UserContext';
 import { getByFirstLetter, getByIngredients, getByName,
-  getCategory,
-  getCategoryFilter,
-  getDetailsRecipe } from '../services/api';
+  getCategory, getCategoryFilter } from '../services/api';
 
 function UserProvider({ children }) {
   const history = useHistory();
+  const location = useLocation();
+  const path = location.pathname.split('/')[1];
+  const pathAlt = path === 'foods' ? 'meals' : 'drinks';
   const [enableSearchBar, setEnableSearchBar] = useState(false);
   const [data, setData] = useState([]);
   const [categoryData, setCategoryData] = useState([]);
-  const [category, setCategory] = useState([]);
+  const [categoryList, setCategoryList] = useState([]);
   const [filterCategory, setFilterCategory] = useState('');
   const [search, setSearch] = useState({
     value: '',
     selectedRadio: '',
-    path: '',
   });
   const [userInfo, setUserInfo] = useState({
     email: '',
     password: '',
   });
 
-  const categoryFilterFood = async (selectedCategory) => {
-    const apiFilterCategory = await getCategoryFilter('foods', selectedCategory);
+  const filterByCategory = async (selectedCategory) => {
+    const apiFilterCategory = await getCategoryFilter(path, selectedCategory);
     setFilterCategory(selectedCategory);
     setCategoryData(apiFilterCategory);
   };
 
-  const detailsRecipeDrinks = async (idDrink) => {
-    const apiDetails = await getDetailsRecipe('drinks', idDrink);
-    setDetailsRecipe(apiDetails.drinks[0]);
+  const getStateCategory = async () => {
+    const apiCategory = await getCategory(path);
+    const categories = apiCategory[pathAlt].map((elen) => elen.strCategory);
+    setCategoryList(categories);
   };
 
-  const categoryFilterDrink = async (selectedCategory) => {
-    const apiFilterCategory = await getCategoryFilter('drink', selectedCategory);
-    setFilterCategory(selectedCategory);
-    setCategoryData(apiFilterCategory);
-  };
-
-  const getStateCategoryFood = async () => {
-    const apiCategory = await getCategory('foods');
-    const categories = apiCategory.meals.map((elen) => elen.strCategory);
-    setCategory(categories);
-  };
-
-  const getStateCategoryDrinks = async () => {
-    const apiCategory = await getCategory('drinks');
-    const categories = apiCategory.drinks.map((elen) => elen.strCategory);
-    setCategory(categories);
-  };
-
-  const handleClick = () => {
-    const { path, value, selectedRadio } = search;
+  const handleClick = async () => {
+    const { value, selectedRadio } = search;
+    let apiResults;
     if (selectedRadio === 'ingredients') {
-      getByIngredients(path, value).then((element) => setData(element));
+      apiResults = await getByIngredients(path, value);
     } else if (selectedRadio === 'name') {
-      getByName(path, value).then((element) => setData(element));
+      apiResults = await getByName(path, value);
     } else if (value.length > 1) {
       global.alert('Your search must have only 1 (one) character');
+      return;
     } else {
-      getByFirstLetter(path, value).then((element) => setData(element));
+      apiResults = await getByFirstLetter(path, value);
+    }
+    setData(apiResults);
+
+    // Post-click checks
+    const list = apiResults[pathAlt];
+    if (list === null) {
+      global.alert('Sorry, we haven\'t found any recipes for these filters.');
+    } else if (list.length === 1 && !filterCategory) {
+      history.push(`/${path}/${list[0].idDrink ?? list[0].idMeal}`);
     }
   };
 
-  const handleSerchBar = () => {
+  const handleSearchBar = () => {
     setEnableSearchBar(!enableSearchBar);
   };
 
-  useEffect(() => {
-    const item = search.path === 'foods' ? 'meals' : 'drinks';
-    if ((Object.keys(data).length && !data[item]) === 0) {
-      global.alert('Sorry, we haven\'t found any recipes for these filters.');
-    } else if (Object.keys(data).length) {
-      const { path } = search;
-      const list = data.drinks ?? data.meals;
-      if (list && list.length === 1 && !filterCategory) {
-        console.log(path);
-        history.push(`/${path}/${list[0].idDrink ?? list[0].idMeal}`);
-      }
-    }
-  }, [data, history, search]);
-
-  const initialRequestFood = () => {
-    getByName('foods', '').then((element) => setData(element));
-  };
-
-  const initialRequestDrink = () => {
-    getByName('drinks', '').then((element) => setData(element));
+  const initialRequest = () => {
+    setFilterCategory('');
+    getByName(path, '').then((element) => setData(element));
   };
 
   const { Provider } = UserContext;
@@ -100,21 +77,18 @@ function UserProvider({ children }) {
         enableSearchBar,
         userInfo,
         data,
-        category,
-        filterCategory,
         categoryData,
+        categoryList,
+        filterCategory,
+        path,
         setUserInfo,
-        handleSerchBar,
+        handleSearchBar,
         setSearch,
         handleClick,
-        initialRequestFood,
-        initialRequestDrink,
-        getStateCategoryFood,
-        getStateCategoryDrinks,
-        categoryFilterFood,
-        categoryFilterDrink,
+        initialRequest,
+        getStateCategory,
+        filterByCategory,
         setFilterCategory,
-        detailsRecipeDrinks,
       } }
     >
       { children }

@@ -14,15 +14,17 @@ function Foods() {
     categoryData,
     filterCategory,
     enableSearchBar,
-    initialRequestFood,
-    getStateCategoryFood,
+    initialRequest,
+    getStateCategory,
   } = useContext(UserContext);
 
   useEffect(() => {
-    getStateCategoryFood();
-    initialRequestFood();
+    getStateCategory();
+    initialRequest();
   }, []);
+
   const renderFoods = filterCategory ? categoryData : data;
+
   return (
     <>
       <Header title="Foods" />

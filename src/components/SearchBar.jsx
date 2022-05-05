@@ -1,10 +1,8 @@
 import React, { useContext } from 'react';
-import { useRouteMatch } from 'react-router-dom/cjs/react-router-dom.min';
 import '../assets/searchBar.css';
 import UserContext from '../context/UserContext';
 
 function SearchBar() {
-  const match = useRouteMatch();
   const {
     search,
     setSearch,
@@ -21,11 +19,7 @@ function SearchBar() {
           name="value"
           id="search"
           onChange={
-            ({ target }) => setSearch({
-              ...search,
-              [target.name]: target.value,
-              path: match.path.split('/')[1],
-            })
+            ({ target }) => setSearch({ ...search, [target.name]: target.value })
           }
         />
       </label>

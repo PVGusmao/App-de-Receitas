@@ -1,16 +1,16 @@
 import React, { useEffect, useState } from 'react';
-import { PropTypes } from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { getByName, getDetailsRecipe } from '../services/api';
 import Cards from '../components/Cards';
+import { getStorage } from '../services/storage';
 
-const iHateMagicNumber = 13;
-const iHateMagicNumber3 = 6;
+const INGREDIENT_SLICE = 13;
+const LIMIT_CARDS = 6;
 
-function DrinkDetail(props) {
+function DrinkDetail() {
   const history = useHistory();
+  const { id } = useParams();
   const [detailsRecipe, setDetailsRecipe] = useState({});
-  const { match: { params: { id } } } = props;
   const [meals, setMeals] = useState([]);
   const detailsRecipeDrinks = async (idDrink) => {
     const apiDetails = await getDetailsRecipe('drinks', idDrink);
@@ -22,9 +22,9 @@ function DrinkDetail(props) {
   };
 
   const handleButtonText = () => {
-    const drinks = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const drinks = getStorage('inProgressRecipes');
 
-    if (!Object.keys(drinks.cocktails).some((item) => item === id)) {
+    if (!Object.keys(drinks.cocktails).includes(id)) {
       return 'Start Recipe';
     }
 
@@ -39,7 +39,8 @@ function DrinkDetail(props) {
   const ingredients = Object.entries(detailsRecipe)
     .filter(([key, value]) => key.startsWith('strIngredient') && value)
     .map(([key, value]) => `${value} - ${detailsRecipe[
-      `strMeasure${key.slice(iHateMagicNumber)}`]}`);
+      `strMeasure${key.slice(INGREDIENT_SLICE)}`]}`);
+
   return (
     <>
       <h1 data-testid="recipe-title">{detailsRecipe.strDrink }</h1>
@@ -73,7 +74,7 @@ function DrinkDetail(props) {
         } }
       >
         {
-          meals.slice(0, iHateMagicNumber3).map((food, index) => (
+          meals.slice(0, LIMIT_CARDS).map((food, index) => (
             <Cards
               id={ food.idMeal }
               key={ food.idMeal }
@@ -86,8 +87,8 @@ function DrinkDetail(props) {
         }
       </div>
       {
-        JSON.parse(localStorage.getItem('doneRecipes')) === null
-          ? (
+        !getStorage('doneRecipes').some((recipe) => recipe.id === id)
+          && (
             <button
               type="button"
               data-testid="start-recipe-btn"
@@ -98,38 +99,13 @@ function DrinkDetail(props) {
               } }
             >
               {
-                JSON.parse(localStorage.getItem('inProgressRecipes')) !== null
-                && handleButtonText()
+                handleButtonText()
               }
             </button>
-          ) : !JSON.parse(localStorage.getItem('doneRecipes'))
-            .some((recipe) => recipe.id === id)
-      && (
-        <button
-          type="button"
-          data-testid="start-recipe-btn"
-          onClick={ handleHistory }
-          style={ {
-            position: 'fixed',
-            bottom: '0px',
-          } }
-        >
-          {
-            handleButtonText()
-          }
-        </button>
-      )
+          )
       }
     </>
   );
 }
-
-DrinkDetail.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default DrinkDetail;

@@ -1,18 +1,18 @@
 import React, { useEffect, useState } from 'react';
-import { PropTypes } from 'prop-types';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { getDetailsRecipe, getByName } from '../services/api';
 import Cards from '../components/Cards';
+import { getStorage } from '../services/storage';
 
-const iHateMagicNumber = 13;
-const iHateMagicNumber2 = 32;
-const iHateMagicNumber3 = 6;
+const INGREDIENT_SLICE = 13;
+const YOUTUBE_SLICE = 32;
+const LIMIT_CARDS = 6;
 
-function FoodDetail(props) {
+function FoodDetail() {
   const history = useHistory();
+  const { id } = useParams();
   const [detailsRecipe, setDetailsRecipe] = useState({});
   const [drinks, setDrinks] = useState([]);
-  const { match: { params: { id } } } = props;
   const detailsRecipeFoods = async (idFood) => {
     const apiDetails = await getDetailsRecipe('foods', idFood);
     setDetailsRecipe(apiDetails.meals[0]);
@@ -23,9 +23,9 @@ function FoodDetail(props) {
   };
 
   const handleButtonText = () => {
-    const meals = JSON.parse(localStorage.getItem('inProgressRecipes'));
+    const meals = getStorage('inProgressRecipes');
 
-    if (!Object.keys(meals.meals).some((item) => item === id)) {
+    if (!Object.keys(meals.meals).includes(id)) {
       return 'Start Recipe';
     }
 
@@ -40,7 +40,7 @@ function FoodDetail(props) {
   const ingredients = Object.entries(detailsRecipe)
     .filter(([key, value]) => key.startsWith('strIngredient') && value)
     .map(([key, value]) => `${value} - ${detailsRecipe[
-      `strMeasure${key.slice(iHateMagicNumber)}`]}`);
+      `strMeasure${key.slice(INGREDIENT_SLICE)}`]}`);
 
   return (
     <>
@@ -65,7 +65,7 @@ function FoodDetail(props) {
           ))
         }
       </ul>
-      <iframe width="560" height="315" src={ `https://www.youtube.com/embed/${detailsRecipe?.strYoutube?.slice?.(iHateMagicNumber2)}` } title="YouTube video player" frameBorder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowFullScreen data-testid="video" />
+      <iframe width="560" height="315" src={ `https://www.youtube.com/embed/${detailsRecipe?.strYoutube?.slice?.(YOUTUBE_SLICE)}` } title="YouTube video player" frameBorder="0" allow="clipboard-write; encrypted-media; picture-in-picture" allowFullScreen data-testid="video" />
       <p data-testid="instructions">{ detailsRecipe.strInstructions }</p>
       <div
         className="teste"
@@ -76,7 +76,7 @@ function FoodDetail(props) {
         } }
       >
         {
-          drinks.slice(0, iHateMagicNumber3).map((drink, index) => (
+          drinks.slice(0, LIMIT_CARDS).map((drink, index) => (
             <Cards
               id={ drink.idDrink }
               key={ drink.idDrink }
@@ -89,24 +89,7 @@ function FoodDetail(props) {
         }
       </div>
       {
-        JSON.parse(localStorage.getItem('doneRecipes')) === null
-          ? (
-            <button
-              type="button"
-              data-testid="start-recipe-btn"
-              onClick={ handleHistory }
-              style={ {
-                position: 'fixed',
-                bottom: '0px',
-              } }
-            >
-              {
-                JSON.parse(localStorage.getItem('inProgressRecipes')) !== null
-                && handleButtonText()
-              }
-            </button>
-          ) : !JSON.parse(localStorage.getItem('doneRecipes'))
-            .some((recipe) => recipe.id === id)
+        !getStorage('doneRecipes').some((recipe) => recipe.id === id)
           && (
             <button
               type="button"
@@ -126,13 +109,5 @@ function FoodDetail(props) {
     </>
   );
 }
-
-FoodDetail.propTypes = {
-  match: PropTypes.shape({
-    params: PropTypes.shape({
-      id: PropTypes.string.isRequired,
-    }).isRequired,
-  }).isRequired,
-};
 
 export default FoodDetail;
