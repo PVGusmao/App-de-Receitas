@@ -1,6 +1,6 @@
 import React from 'react';
 import { useHistory } from 'react-router-dom';
-import { getStorage, setStorage } from '../services/storage';
+import { getStorage } from '../services/storage';
 import '../assets/profileCard.css';
 
 function ProfileCard() {
@@ -8,13 +8,14 @@ function ProfileCard() {
 
   const handlePush = ({ target }) => {
     if (target.id === '') {
-      setStorage('user', { email: '' });
-      setStorage('mealsToken', null);
-      setStorage('cocktailsToken', null);
-      setStorage('doneRecipes', []);
-      setStorage('favoriteRecipes', []);
-      setStorage('inProgressRecipes', {});
+      localStorage.setItem('user', null);
+      localStorage.setItem('mealsToken', null);
+      localStorage.setItem('cocktailsToken', null);
+      localStorage.setItem('doneRecipes', null);
+      localStorage.setItem('favoriteRecipes', null);
+      localStorage.setItem('inProgressRecipes', null);
     }
+    console.log(localStorage.getItem('mealsToken'));
     history.push(`/${target.id}`);
   };
 
