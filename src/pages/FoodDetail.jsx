@@ -2,17 +2,28 @@ import React, { useEffect, useState } from 'react';
 import { useHistory, useParams } from 'react-router-dom';
 import { getDetailsRecipe, getByName } from '../services/api';
 import Cards from '../components/Cards';
-import { getStorage } from '../services/storage';
+import { getStorage, setStorage } from '../services/storage';
+import shareIcon from '../images/shareIcon.svg';
+import whiteHeartIcon from '../images/whiteHeartIcon.svg';
+import blackHeartIcon from '../images/blackHeartIcon.svg';
+
+const copy = require('clipboard-copy');
+
+/* button.addEventListener('click', function () {
+  copy('This is some cool text')
+}) */
 
 const INGREDIENT_SLICE = 13;
 const YOUTUBE_SLICE = 32;
 const LIMIT_CARDS = 6;
+const MSG_TIMEOUT = 3000;
 
 function FoodDetail() {
   const history = useHistory();
   const { id } = useParams();
   const [detailsRecipe, setDetailsRecipe] = useState({});
   const [drinks, setDrinks] = useState([]);
+  const [shared, setShared] = useState(false);
   const detailsRecipeFoods = async (idFood) => {
     const apiDetails = await getDetailsRecipe('foods', idFood);
     setDetailsRecipe(apiDetails.meals[0]);
@@ -32,6 +43,24 @@ function FoodDetail() {
     return 'Continue Recipe';
   };
 
+  const handleShare = () => {
+    copy(window.location.href);
+    setShared(true);
+    setTimeout(() => setShared(false), MSG_TIMEOUT);
+  };
+
+  const handleFavorite = () => {
+    if (getStorage('favoriteRecipes').some((recipe) => recipe.id === id)) {
+      // unfavorite
+    } else {
+      setStorage('favoriteRecipes', [...getStorage('favoriteRecipes'), {
+        id,
+        type: 'food',
+        nationality: null,
+      }]);
+    }
+  };
+
   useEffect(() => {
     detailsRecipeFoods(id);
     getByName('drinks', '').then((element) => setDrinks(element.drinks));
@@ -44,14 +73,21 @@ function FoodDetail() {
 
   return (
     <>
-      <h1 data-testid="recipe-title">{detailsRecipe.strMeal }</h1>
+      <h1 data-testid="recipe-title">{ detailsRecipe.strMeal }</h1>
       <img
         src={ detailsRecipe.strMealThumb }
         alt={ detailsRecipe.strMeal }
         data-testid="recipe-photo"
       />
-      <button type="button" data-testid="share-btn">compartilhar</button>
-      <button type="button" data-testid="favorite-btn">Favoritar</button>
+      { shared && <p>Link copied!</p> }
+      <button type="button" data-testid="share-btn" onClick={ handleShare }>
+        <img src={ shareIcon } alt="Share recipe" />
+      </button>
+      <button type="button" data-testid="favorite-btn" onClick={ handleFavorite }>
+        { getStorage('favoriteRecipes').some((recipe) => recipe.id === id)
+          ? <img src={ blackHeartIcon } alt="Unfavorite recipe" />
+          : <img src={ whiteHeartIcon } alt="Favorite recipe" /> }
+      </button>
       <p data-testid="recipe-category">{ detailsRecipe.strCategory}</p>
       <ul>
         {
