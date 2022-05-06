@@ -8,14 +8,8 @@ function ProfileCard() {
 
   const handlePush = ({ target }) => {
     if (target.id === '') {
-      localStorage.setItem('user', null);
-      localStorage.setItem('mealsToken', null);
-      localStorage.setItem('cocktailsToken', null);
-      localStorage.setItem('doneRecipes', null);
-      localStorage.setItem('favoriteRecipes', null);
-      localStorage.setItem('inProgressRecipes', null);
+      localStorage.clear();
     }
-    console.log(localStorage.getItem('mealsToken'));
     history.push(`/${target.id}`);
   };
 
