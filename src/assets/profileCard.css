@@ -1,16 +1,16 @@
 .profile-card-wrapper {
   align-items: center;
   display: flex;
-  justify-content: center;
   height: 450px;
+  justify-content: center;
 }
 
 .button-wrapper {
   align-items: center;
   display: flex;
   flex-direction: column;
-  justify-content: space-evenly;
   height: 250px;
+  justify-content: space-evenly;
   width: 100%;
 }
 
