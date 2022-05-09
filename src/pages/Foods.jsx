@@ -27,7 +27,10 @@ function Foods(props) {
     const { location: { state } } = props;
     getStateCategory();
     initialRequest();
-    getIngredientFilter(path, state).then((element) => setIngredient(element));
+    console.log(state);
+    if (ingredient) {
+      getIngredientFilter(path, state).then((element) => setIngredient(element));
+    }
   }, []);
 
   const renderFoods = filterCategory ? categoryData : ingredient ?? data;
