@@ -69,3 +69,12 @@ export async function getIngredients(path) {
   const data = await response.json();
   return data;
 }
+
+export async function getIngredientFilter(path, Ingredient) {
+  const url = path === 'foods'
+    ? `https://www.themealdb.com/api/json/v1/1/filter.php?i=${Ingredient}`
+    : `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${Ingredient}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
