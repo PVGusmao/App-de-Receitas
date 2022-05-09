@@ -51,3 +51,12 @@ export async function getDetailsRecipe(path, id) {
   const data = await response.json();
   return data;
 }
+
+export async function getRandomRecipe(path) {
+  const url = path === 'foods'
+    ? 'https://www.themealdb.com/api/json/v1/1/random.php'
+    : 'https://www.thecocktaildb.com/api/json/v1/1/random.php';
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
