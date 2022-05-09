@@ -8,7 +8,7 @@ import { getByFirstLetter, getByIngredients, getByName,
 function UserProvider({ children }) {
   const history = useHistory();
   const location = useLocation();
-  const path = location.pathname.split('/')[1];
+  const path = location.pathname.match(/\/(foods|drinks)/)?.[1];
   const pathAlt = path === 'foods' ? 'meals' : 'drinks';
   const [enableSearchBar, setEnableSearchBar] = useState(false);
   const [data, setData] = useState([]);

@@ -60,3 +60,21 @@ export async function getRandomRecipe(path) {
   const data = await response.json();
   return data;
 }
+
+export async function getIngredients(path) {
+  const url = path === 'foods'
+    ? 'https://www.themealdb.com/api/json/v1/1/list.php?i=list'
+    : 'https://www.thecocktaildb.com/api/json/v1/1/list.php?i=list';
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}
+
+export async function getIngredientFilter(path, Ingredient) {
+  const url = path === 'foods'
+    ? `https://www.themealdb.com/api/json/v1/1/filter.php?i=${Ingredient}`
+    : `https://www.thecocktaildb.com/api/json/v1/1/filter.php?i=${Ingredient}`;
+  const response = await fetch(url);
+  const data = await response.json();
+  return data;
+}

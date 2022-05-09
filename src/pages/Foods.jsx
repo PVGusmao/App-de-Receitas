@@ -1,16 +1,21 @@
-import React, { useContext, useEffect } from 'react';
+import React, { useContext, useEffect, useState } from 'react';
+import PropTypes from 'prop-types';
 import Cards from '../components/Cards';
 import Header from '../components/Header';
 import SearchBar from '../components/SearchBar';
 import UserContext from '../context/UserContext';
 import Footer from '../components/Footer';
 import ButtonsCategory from '../components/ButtonsCategory';
+import { getIngredientFilter } from '../services/api';
 
 const LIMIT_CARDS = 12;
 
-function Foods() {
+function Foods(props) {
+  const [ingredient, setIngredient] = useState();
+
   const {
     data,
+    path,
     categoryData,
     filterCategory,
     enableSearchBar,
@@ -19,11 +24,13 @@ function Foods() {
   } = useContext(UserContext);
 
   useEffect(() => {
+    const { location: { state } } = props;
     getStateCategory();
     initialRequest();
+    getIngredientFilter(path, state).then((element) => setIngredient(element));
   }, []);
 
-  const renderFoods = filterCategory ? categoryData : data;
+  const renderFoods = filterCategory ? categoryData : ingredient ?? data;
 
   return (
     <>
@@ -50,5 +57,9 @@ function Foods() {
     </>
   );
 }
+
+Foods.propTypes = {
+  location: PropTypes.instanceOf(PropTypes.string),
+}.isRequired;
 
 export default Foods;
