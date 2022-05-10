@@ -78,3 +78,15 @@ export async function getIngredientFilter(path, Ingredient) {
   const data = await response.json();
   return data;
 }
+
+export async function getNationality() {
+  const response = await fetch('https://www.themealdb.com/api/json/v1/1/list.php?a=list');
+  const data = await response.json();
+  return data;
+}
+
+export async function getNationalityFilter(nationality) {
+  const response = await fetch(`https://www.themealdb.com/api/json/v1/1/filter.php?a=${nationality}`);
+  const data = await response.json();
+  return data;
+}
