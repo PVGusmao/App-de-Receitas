@@ -11,7 +11,7 @@ import { getIngredientFilter } from '../services/api';
 const LIMIT_CARDS = 12;
 
 function Drinks(props) {
-  const [ingredient, setIngredient] = useState('');
+  const [ingredient, setIngredient] = useState();
   const {
     data,
     path,
@@ -26,8 +26,7 @@ function Drinks(props) {
     const { location: { state } } = props;
     getStateCategory();
     initialRequest();
-    setIngredient(state);
-    if (ingredient) {
+    if (state) {
       getIngredientFilter(path, state).then((element) => setIngredient(element));
     }
   }, []);
