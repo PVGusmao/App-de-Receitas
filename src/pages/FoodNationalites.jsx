@@ -1,8 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import Header from '../components/Header';
 import Footer from '../components/Footer';
-import { getNationality, getNationalityFilter } from '../services/api';
+import { getNationality, getNationalityFilter, getByName } from '../services/api';
 import Cards from '../components/Cards';
+
+const DOZE = 12;
 
 function FoodNationalites() {
   const [nationality, setNationality] = useState([]);
@@ -12,15 +14,18 @@ function FoodNationalites() {
     if (nationality.length === 0) {
       getNationality().then((element) => setNationality(element.meals));
     }
-    // if (filteredNationality.length === 0) {
-    //   getNationalityFilter('American')
-    //     .then((element) => setfilteredNationality(element.meals));
-    // }
+    getByName('foods', '')
+      .then((element) => setfilteredNationality(element.meals));
   }, []);
 
   const handleChange = async ({ target }) => {
-    const data = await getNationalityFilter(target.value);
-    setfilteredNationality(data.meals);
+    if (target.value === 'all') {
+      const data = await getByName('foods', '');
+      setfilteredNationality(data.meals);
+    } else {
+      const data = await getNationalityFilter(target.value);
+      setfilteredNationality(data.meals);
+    }
   };
 
   return (
@@ -31,6 +36,7 @@ function FoodNationalites() {
         className="country-list"
         onChange={ handleChange }
       >
+        <option data-testid="All-option" value="all">All</option>
         {
           nationality && nationality.map((element) => (
             <option
@@ -45,7 +51,8 @@ function FoodNationalites() {
       </select>
       <section>
         {
-          filteredNationality && filteredNationality.map((element, index) => (
+          filteredNationality
+          && filteredNationality.slice(0, DOZE).map((element, index) => (
             <Cards
               id={ element.idMeal }
               key={ element.idMeal }
