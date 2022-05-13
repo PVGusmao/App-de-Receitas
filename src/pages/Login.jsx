@@ -10,15 +10,13 @@ function Login() {
   const [isDisabled, setIsDisabled] = useState(true);
   const history = useHistory();
 
-  const {
-    userInfo,
-    setUserInfo,
-  } = useContext(UserContext);
+  const { userInfo, setUserInfo } = useContext(UserContext);
 
   const validationLogin = ({ email, password }) => {
     const validEmail = /\S+@\S+\.\S+/; // regex
     if (
-      password.length > MIN_PASSWORD && validEmail.test(email) // para comparar o regex
+      password.length > MIN_PASSWORD
+      && validEmail.test(email) // para comparar o regex
     ) {
       setIsDisabled(false);
     } else {
