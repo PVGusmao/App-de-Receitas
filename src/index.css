@@ -21,7 +21,7 @@ button {
 	padding: 0;
 }
 
-input {
+input[type="text"], input[type="password"] {
   -webkit-appearance: none;
   background: none;
   border: none;

@@ -1,8 +1,9 @@
 footer {
-  background-color: rgb(169, 146, 125);
+  background-color: var(--second);
   bottom: 0;
   display: flex;
   justify-content: space-around;
+  padding: 10px;
   position: fixed;
   width: 100%;
 }

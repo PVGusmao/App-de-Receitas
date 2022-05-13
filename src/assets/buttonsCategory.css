@@ -1,0 +1,16 @@
+.btn-category-wrapper {
+    align-items: center;
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: center;
+}
+
+.btn-category {
+    background-color: var(--main);
+    color: var(--second);
+    font-size: 18px;
+    font-weight: 600;
+    height: 45px;
+    margin: 10px;
+    width: 90px;
+}

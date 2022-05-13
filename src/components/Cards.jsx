@@ -2,12 +2,14 @@ import React, { useContext } from 'react';
 import PropTypes from 'prop-types';
 import { Link } from 'react-router-dom';
 import UserContext from '../context/UserContext';
+import '../assets/cards.css';
 
 function Cards(props) {
   const { path } = useContext(UserContext);
   const { index, title, image, id, details } = props;
   return (
     <Link
+      className="link-details"
       data-testid={ `${index}-recomendation-card` }
       to={ `/${path}/${id}` }
     >

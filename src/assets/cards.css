@@ -1,0 +1,15 @@
+
+.link-details {
+  text-decoration: none;
+}
+
+.card img {
+  margin: 10px;
+  width: 320px;
+}
+
+.card h3 {
+  color: var(--main);
+  font-size: 20px;
+  text-align: center;
+}
